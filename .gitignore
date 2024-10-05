@@ -75,4 +75,4 @@ bin
 *.bak
 
 # Ignore property files
-*.properties
+application.properties
