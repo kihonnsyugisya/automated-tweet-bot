@@ -1,4 +1,4 @@
-package com.kihonsyugisya.bot;
+package com.kihonsyugisya;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
