@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.kihonsyugisya.dto.EmailRequestDto;
 import com.kihonsyugisya.service.EmailService;
 
 @Component
@@ -14,11 +15,11 @@ public class EmailLogger {
     @Autowired
     private EmailService emailService;
 
-    public void logAndEmail(String message) {
+    public void logAndEmail(EmailRequestDto emailRequestDto) {
         // 通常のログ出力
-        logger.info(message);
+        logger.info(emailRequestDto.getBody());
         
         // メールで送信
-        emailService.sendEmail("recipient@example.com", "ログ通知", message);
+        emailService.sendEmail(emailRequestDto);
     }
 }
