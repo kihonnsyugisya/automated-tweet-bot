@@ -6,7 +6,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.kihonsyugisya.dto.OpenAiRequestDto;
@@ -57,25 +56,18 @@ public class OpenAiService {
         HttpEntity<OpenAiRequestDto> entity = new HttpEntity<>(requestDto, headers);
         
         System.out.println(entity.getBody());
-        try {
-            // リクエストを送信し、レスポンスを自動的にパース
-            ResponseEntity<OpenAiResponseDto> response = restTemplate.exchange(apiUrl, HttpMethod.POST, entity, OpenAiResponseDto.class);
-            
-            // レスポンスから末尾のcontentを取得
-            OpenAiResponseDto apiResponse = response.getBody();
-            if (apiResponse != null && !apiResponse.getChoices().isEmpty()) {
-                int lastIndex = apiResponse.getChoices().size() - 1;
-                return apiResponse.getChoices().get(lastIndex).getMessage().getContent();
-            }
 
-        } catch (HttpClientErrorException e) {
-            // エラーが発生した場合の処理
-        	//TODO:エラー通知用のエクセプションつくる 
-            System.err.println("Error occurred: " + e.getResponseBodyAsString());
-            throw e;
-        }
+        // リクエストを送信し、レスポンスを自動的にパース
+        ResponseEntity<OpenAiResponseDto> response = restTemplate.exchange(apiUrl, HttpMethod.POST, entity, OpenAiResponseDto.class);
         
-      //TODO:エラー通知用のエクセプションつくる 
+        // レスポンスから末尾のcontentを取得
+        OpenAiResponseDto apiResponse = response.getBody();
+        if (apiResponse != null && !apiResponse.getChoices().isEmpty()) {
+            int lastIndex = apiResponse.getChoices().size() - 1;
+            return apiResponse.getChoices().get(lastIndex).getMessage().getContent();
+        }
+
+        
         // 応答がない場合はエラーを投げる
         throw new RuntimeException("No response from OpenAI API");
     }

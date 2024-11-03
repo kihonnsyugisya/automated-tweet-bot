@@ -17,8 +17,8 @@ public class EmailServiceTest {
         // テスト用のEmailRequestDtoを作成
         EmailRequestDto emailRequestDto = new EmailRequestDto();
         emailRequestDto.setTo(null);
-        emailRequestDto.setSubject("宛先nullでも正しく送信されるか");
-        emailRequestDto.setBody("宛先をnullにした場合、プロパティのメアドが読み込まれること");
+        emailRequestDto.setSubject(null);
+        emailRequestDto.setBody("宛先、件名をnullにした場合、プロパティのメアドが読み込まれること");
 
         // メール送信メソッドを呼び出す
         emailService.sendEmail(emailRequestDto);

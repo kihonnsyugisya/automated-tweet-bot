@@ -40,8 +40,8 @@ public class RakutenApiService {
                 .queryParam("affiliateId", affiliateId)
                 .queryParam("formatVersion", 2)
                 .queryParam("page", 1)
-                .queryParam("carrier", 1)
-                .queryParam("elements", "rank,itemName,itemCaption,catchcopy,affiliateUrl,availability,pointRate,pointRateStartTime,pointRateEndTime");
+//                .queryParam("carrier", 1)
+                .queryParam("elements", "rank,itemName,itemCaption,catchcopy,affiliateUrl,availability,pointRate,pointRateStartTime,pointRateEndTime,itemPrice");
 
         // ageがnullでない場合のみクエリに追加
         if (rakutenApiRarametersEntity.getAge() != null) {
@@ -60,15 +60,13 @@ public class RakutenApiService {
         System.out.println("--- URL ----------------------------------------------------------");
         System.out.println(url);
 
-    	// TODO: エラーが返ってきた場合の処理を追加する
         RakutenApiResponseDto apiResponse = restTemplate.getForObject(url, RakutenApiResponseDto.class);
 
         // レスポンスの一部をログに出力して確認
-        System.out.println(apiResponse.getItems().get(0).getPointRateStartTime() + "sdfadddddddddddddddddddddddddddd");
-
-        if(apiResponse.getItems().get(0).getPointRateStartTime() == "") {
-            System.out.println("ddddaaaa");
-        }
+        System.out.println(apiResponse.getItems().get(0).getPointRateStartTime() + ": response");
+        System.out.println("--- RakutenResponse----------------------------------------------------------");
+        System.out.println(url);
+        
         
         return apiResponse; // ProductDtoのリストを返す
     }

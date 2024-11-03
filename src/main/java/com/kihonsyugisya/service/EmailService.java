@@ -17,6 +17,10 @@ public class EmailService {
     // プロパティからメールの宛先を注入
     @Value("${email.recipient}")
     private String defaultRecipient;
+    
+    // プロパティからプロジェクト名を注入
+    @Value("${spring.application.name}")
+    private String projectName;
 
     public void sendEmail(EmailRequestDto emailRequestDto) {
         SimpleMailMessage message = new SimpleMailMessage(); 
@@ -24,7 +28,7 @@ public class EmailService {
         // 受信者、件名、本文を設定
         // 宛先が指定されていない場合はデフォルトを使用
         message.setTo(emailRequestDto.getTo() != null ? emailRequestDto.getTo() : defaultRecipient); 
-        message.setSubject(emailRequestDto.getSubject()); 
+        message.setSubject(emailRequestDto.getSubject() != null ? emailRequestDto.getSubject() :projectName + ": エラー通知"); 
         message.setText(emailRequestDto.getBody()); 
 
         // mailSenderを使ってメールを送信

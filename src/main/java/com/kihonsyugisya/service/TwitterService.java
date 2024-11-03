@@ -27,12 +27,7 @@ public class TwitterService {
                 .build());
 
         // 引数で渡された内容をツイートする
-        try {
-        	twitterClient.postTweet(contents);
-		} catch (Exception e) {
-			// TODO:メール送信
-			System.out.println("tweet 失敗　:" + e);
-		}
-        
+        twitterClient.postTweet(contents);
+
     }
 }

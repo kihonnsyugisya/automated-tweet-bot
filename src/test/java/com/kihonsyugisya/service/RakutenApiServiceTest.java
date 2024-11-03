@@ -11,7 +11,6 @@ import org.springframework.web.client.RestTemplate;
 import com.kihonsyugisya.dto.RakutenApiResponseDto;
 import com.kihonsyugisya.entity.RakutenApiParametersEntity;
 import com.kihonsyugisya.properties.RakutenProperties;
-import com.kihonsyugisya.repository.RakutenApiParametersMapper;
 
 @SpringBootTest
 public class RakutenApiServiceTest {
@@ -22,8 +21,8 @@ public class RakutenApiServiceTest {
 //    @MockBean
 //    private RakutenApiParametersMapper rakutenApiParametersMapper;
     
-    @Autowired
-    private RakutenApiParametersMapper rakutenApiParametersMapper;
+//    @Autowired
+//    private RakutenApiParametersMapper rakutenApiParametersMapper;
 
     @Autowired
     private RakutenProperties rakutenProperties;
@@ -32,6 +31,7 @@ public class RakutenApiServiceTest {
     private RestTemplate restTemplate;
 
     @BeforeEach
+    
     public void setUp() {
         // ここでは特に何もする必要がありません。
     }
