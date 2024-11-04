@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import com.kihonsyugisya.dto.OpenAiRequestDto;
 import com.kihonsyugisya.dto.RakutenApiResponseDto.Item;
 import com.kihonsyugisya.enums.ExecutionContextKeys;
+import com.kihonsyugisya.service.BatchService;
 import com.kihonsyugisya.service.OpenAiService;
 
 @Component
@@ -20,6 +21,9 @@ public class GenerateTweetTasklet implements Tasklet {
 
     @Autowired
     private OpenAiService openAiService;
+    
+    @Autowired
+    private BatchService batchService;
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
@@ -73,6 +77,9 @@ public class GenerateTweetTasklet implements Tasklet {
         if (!tweetContent.contains("#PR")) {
             tweetContent += " #PR";
         }
+        
+        // アフィリエイトURLをDBに保存
+        batchService.registerAffiliateUrl(item.getAffiliateUrl());
 
         System.out.println("生成されたツイート内容: " + tweetContent);
 

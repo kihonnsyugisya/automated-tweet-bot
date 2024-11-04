@@ -21,6 +21,7 @@ public class GlobalExceptionHandler {
     public void handleBadRequest(Exception ex) {
         EmailRequestDto emailRequestDto = new EmailRequestDto();
         emailRequestDto.setSubject("Bad Request: " + ex.getMessage());
+        emailRequestDto.setBody("An internal server error occurred:\n\n" + ex.toString());
         
         // エラー発生時にメール通知
         emailLogger.logAndEmail(emailRequestDto);
@@ -33,6 +34,7 @@ public class GlobalExceptionHandler {
     public void handleException(Exception ex) {
         EmailRequestDto emailRequestDto = new EmailRequestDto();
         emailRequestDto.setSubject("Internal Server Error: " + ex.getMessage());
+        emailRequestDto.setBody("An internal server error occurred:\n\n" + ex.toString());
         
         // エラー発生時にメール通知
         emailLogger.logAndEmail(emailRequestDto);

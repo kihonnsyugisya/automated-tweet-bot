@@ -1,0 +1,84 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    max-width: 600px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+/* フォームのスタイル */
+form {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+/* ラベルのスタイル */
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+/* テキスト入力フィールドのスタイル */
+input[type="text"],
+textarea {
+    width: 100%; /* 入力フィールドがフォームの幅に合わせて広がる */
+    max-width: 100%; /* 最大幅をフォームの幅に制限 */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* パディングを含めてサイズを計算 */
+}
+
+/* ボタンのスタイル */
+button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* テキストエリアのスタイル */
+textarea {
+    height: 150px; /* 高さを適宜調整 */
+    resize: vertical; /* ユーザーが高さを調整できるように */
+}
+
+/* メディアクエリによるレスポンシブデザイン */
+@media (max-width: 768px) {
+    body {
+        margin: 10px; /* スマホではマージンを小さく */
+    }
+
+    h1 {
+        font-size: 24px; /* 見出しのサイズを小さく */
+    }
+
+    button {
+        padding: 12px; /* ボタンのパディングを調整 */
+        font-size: 16px; /* ボタンのフォントサイズを調整 */
+    }
+
+    input[type="text"],
+    textarea {
+        font-size: 16px; /* フォームのフォントサイズを調整 */
+    }
+}

@@ -6,10 +6,12 @@ import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.core.step.tasklet.Tasklet;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import com.kihonsyugisya.batch.JobErrorNotificationListener;
 import com.kihonsyugisya.batch.tasklet.FetchProductInfoTasklet;
 import com.kihonsyugisya.batch.tasklet.GenerateTweetTasklet;
 import com.kihonsyugisya.batch.tasklet.PostTweetTasklet;
@@ -21,6 +23,9 @@ import com.kihonsyugisya.batch.tasklet.PostTweetTasklet;
  */
 @Configuration
 class BatchConfiguration {
+	
+	@Autowired
+    private JobErrorNotificationListener jobErrorNotificationListener;
 
     /**
      * ジョブ全体を定義するBean。
@@ -35,6 +40,7 @@ class BatchConfiguration {
     @Bean
     Job myJob(JobRepository jobRepository, Step fetchProductInfoStep, Step generateTweetStep, Step postTweetStep) {
         return new JobBuilder("myJob", jobRepository)
+        		.listener(jobErrorNotificationListener) // リスナー追加
                 .start(fetchProductInfoStep) // 最初のステップを開始
                 .next(generateTweetStep) // 次のステップに進む
                 .next(postTweetStep) // 最後のステップに進む

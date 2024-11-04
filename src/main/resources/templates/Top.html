@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>自動ツイートBOT管理画面</title>
+	<link rel="stylesheet" href="/css/styles.css">
+	<script src="/js/validation.js"></script>
+</head>
+<body>
+    <h1>パラメータ設定</h1>
+    
+    <!-- 楽天のパラメータフォーム -->
+    <form th:action="@{/rakutenParameterRegist}" method="post" th:object="${rakutenFromDto}">
+        <h2>楽天APIパラメータ</h2>
+        <label for="age">年齢:</label>
+        <input type="text" id="age" th:field="*{age}" placeholder="年齢を入力してください"/>
+
+        <label for="sex">性別:</label>
+        <input type="text" id="sex" th:field="*{sex}" placeholder="性別を入力してください"/>
+
+        <button type="submit">楽天パラメータを送信</button>
+    </form>
+
+    <!-- OpenAIのパラメータフォーム -->
+    <form th:action="@{/openAiParameterRegist}" method="post" th:object="${openAiFormDto}">
+        <h2>OpenAI APIパラメータ</h2>
+        <label for="prompt">プロンプト:</label>
+        <textarea id="prompt" th:field="*{prompt}"></textarea>
+
+        <label for="model">モデル:</label>
+        <input type="text" id="model" th:field="*{model}" placeholder="モデル名を入力してください"/>
+
+        <button type="submit">OpenAIパラメータを送信</button>
+    </form>
+</body>
+</html>

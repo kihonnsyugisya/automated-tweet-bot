@@ -40,7 +40,7 @@ public class RakutenApiService {
                 .queryParam("affiliateId", affiliateId)
                 .queryParam("formatVersion", 2)
                 .queryParam("page", 1)
-//                .queryParam("carrier", 1)
+//                .queryParam("carrier", 1) // レスポンスのアフィリエイトURLが機能しなくなる事象があったのでコメントアウト
                 .queryParam("elements", "rank,itemName,itemCaption,catchcopy,affiliateUrl,availability,pointRate,pointRateStartTime,pointRateEndTime,itemPrice");
 
         // ageがnullでない場合のみクエリに追加
@@ -70,4 +70,5 @@ public class RakutenApiService {
         
         return apiResponse; // ProductDtoのリストを返す
     }
+    
 }
