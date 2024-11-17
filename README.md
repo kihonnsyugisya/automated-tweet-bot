@@ -33,3 +33,41 @@ nano ~/.bashrc.d/custom_env_vars.sh
 # ~/.bashrc を再読み込みして環境変数を反映
 source ~/.bashrc
 ```
+
+## 使用しているJavaのバージョンとライブラリ
+
+### Javaバージョン
+- 使用しているJavaバージョン: **Java 21**
+- Gradleの `toolchain` を使用してJava 21を指定。
+
+### ライブラリ
+
+#### Spring Boot
+- **Spring Boot バージョン**: **3.3.4**
+- 以下のSpring Bootスタートパックを使用:
+  - `spring-boot-starter-batch`: バッチ処理用
+  - `spring-boot-starter-mail`: メール送信機能
+  - `spring-boot-starter-thymeleaf`: HTMLテンプレートエンジンとしてThymeleaf
+  - `spring-boot-starter-web`: RESTful API/Webアプリケーション
+
+#### MyBatis
+- **MyBatis バージョン**: **3.0.3**
+- データベース操作用ライブラリとして `mybatis-spring-boot-starter` を使用。
+
+#### Twitter API
+- **Twittered ライブラリ**: **2.23**
+- Twitter APIとの連携に使用。
+
+#### PostgreSQL
+- **PostgreSQL JDBC ドライバー**
+  - `postgresql`: PostgreSQLデータベースと接続するためのJDBCドライバー
+
+#### その他
+- **Lombok**: ボイラープレートコードを削減するために使用。
+  - `lombok`: コンパイル時にコード生成をサポート。
+
+
+#### テスト
+- **JUnit 5**: テストフレームワークとして使用。
+  - `spring-boot-starter-test`: Spring Bootプロジェクトのテストサポート。
+  - `mockito-core`: モックライブラリとしてMockitoを使用。
