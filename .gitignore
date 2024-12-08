@@ -77,3 +77,4 @@ bin
 # Ignore property files
 application.properties
 application-prod.properties
+application-dev.properties
