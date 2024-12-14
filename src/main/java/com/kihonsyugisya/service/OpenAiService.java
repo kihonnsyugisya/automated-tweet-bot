@@ -9,11 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.kihonsyugisya.dto.OpenAiRequestDto;
-import com.kihonsyugisya.dto.OpenAiRequestDto.Message;
 import com.kihonsyugisya.dto.OpenAiResponseDto;
-import com.kihonsyugisya.entity.OpenAiApiParametersEntity;
 import com.kihonsyugisya.properties.OpenAiProperties;
-import com.kihonsyugisya.repository.OpenAiPromptMapper;
 
 @Service
 public class OpenAiService {
@@ -23,9 +20,6 @@ public class OpenAiService {
     
     @Autowired
     private  OpenAiProperties openAiProperties;
-
-    @Autowired
-    private OpenAiPromptMapper openAiPromptMapper;
 
     /**
      * OpenAI APIを呼び出してレスポンスを取得します。
@@ -37,16 +31,6 @@ public class OpenAiService {
     public String callOpenAiApi(OpenAiRequestDto requestDto) {
         String apiUrl = openAiProperties.getApiUrl();
 
-        // DBから最新のプロンプトを取得
-        OpenAiApiParametersEntity latestPromptEntity = openAiPromptMapper.getLatestPrompt();
-
-        if (latestPromptEntity != null) {
-        	requestDto.setModel(latestPromptEntity.getModel());
-        	
-            // 取得したプロンプトをリクエストDTOに追加
-            requestDto.getMessages().addFirst(new Message("system", latestPromptEntity.getPrompt()));
-        }
-
         // リクエストヘッダの作成
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + openAiProperties.getApiKey());  // プロパティからAPIキーを取得
@@ -55,7 +39,7 @@ public class OpenAiService {
         // HttpEntityにヘッダとリクエストDTOをセット
         HttpEntity<OpenAiRequestDto> entity = new HttpEntity<>(requestDto, headers);
         
-        System.out.println(entity.getBody());
+        System.out.println("callOpenAiApi: OpenAIにリクエストする内容 " + entity.getBody());
 
         // リクエストを送信し、レスポンスを自動的にパース
         ResponseEntity<OpenAiResponseDto> response = restTemplate.exchange(apiUrl, HttpMethod.POST, entity, OpenAiResponseDto.class);
@@ -64,6 +48,9 @@ public class OpenAiService {
         OpenAiResponseDto apiResponse = response.getBody();
         if (apiResponse != null && !apiResponse.getChoices().isEmpty()) {
             int lastIndex = apiResponse.getChoices().size() - 1;
+            
+            System.out.println("callOpenAiApi: 生成されたツイート内容 " + apiResponse.getChoices().get(lastIndex).getMessage().getContent());
+            
             return apiResponse.getChoices().get(lastIndex).getMessage().getContent();
         }
 

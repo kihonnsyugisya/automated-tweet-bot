@@ -11,8 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.kihonsyugisya.dto.OpenAiRequestDto;
+import com.kihonsyugisya.dto.OpenAiRequestDto.Message;
 import com.kihonsyugisya.dto.RakutenApiResponseDto.Item;
+import com.kihonsyugisya.entity.OpenAiApiParametersEntity;
 import com.kihonsyugisya.enums.ExecutionContextKeys;
+import com.kihonsyugisya.repository.OpenAiPromptMapper;
 import com.kihonsyugisya.service.BatchService;
 import com.kihonsyugisya.service.OpenAiService;
 
@@ -24,6 +27,9 @@ public class GenerateTweetTasklet implements Tasklet {
     
     @Autowired
     private BatchService batchService;
+    
+    @Autowired
+    private OpenAiPromptMapper openAiPromptMapper;
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
@@ -41,12 +47,12 @@ public class GenerateTweetTasklet implements Tasklet {
 	    promptBuilder.append("ランク: ").append(item.getRank()).append("\n");  
 	    promptBuilder.append("キャッチコピー: ").append(item.getCatchcopy()).append("\n");  
 	    promptBuilder.append("説明: ").append(item.getItemCaption()).append("\n");
-	    promptBuilder.append("アフィリエイトリンク: ").append(item.getAffiliateUrl()).append("\n");
 	    promptBuilder.append("価格: ").append(item.getItemPrice()).append("円\n");            
 	    promptBuilder.append("ポイント還元率: ").append(item.getPointRate()).append("%\n");  
 	    promptBuilder.append("ポイント還元開始: ").append(item.getPointRateStartTime()).append("\n");  
-	    promptBuilder.append("ポイント還元終了: ").append(item.getPointRateEndTime()).append("\n\n");  
-
+	    promptBuilder.append("ポイント還元終了: ").append(item.getPointRateEndTime()).append("\n\n"); 
+	    
+	    System.out.println("GenerateTweetTasklet: アフィリエイトリンク " + item.getAffiliateUrl());
         
         OpenAiRequestDto requestDto = new OpenAiRequestDto();
         // Messageリストを作成し、Messageオブジェクトを追加
@@ -56,7 +62,19 @@ public class GenerateTweetTasklet implements Tasklet {
         // リストをrequestDtoにセット
         requestDto.setMessages(messages);
         
-
+        // DBから最大番号のIDを取得
+        long maxPromptId = openAiPromptMapper.getMaxPromptId();
+        
+        // DBから最新のプロンプトを取得
+        OpenAiApiParametersEntity latestPromptEntity = openAiPromptMapper.getLatestPrompt(maxPromptId);
+        
+        if (latestPromptEntity != null) {
+        	requestDto.setModel(latestPromptEntity.getModel());
+        	
+            // 取得したプロンプトをリクエストDTOに追加
+            requestDto.getMessages().addFirst(new Message("system", latestPromptEntity.getPrompt()));
+        }
+        
         // OpenAI APIの呼び出し
         String tweetContent;
         try {
@@ -65,23 +83,27 @@ public class GenerateTweetTasklet implements Tasklet {
             System.err.println("OpenAI API呼び出し中にエラーが発生しました: " + e.getMessage());
             throw e;  // 必要であれば例外をスローする
         }
+        
+        // 生成されたツイートに#PRが付いているかチェックし、なければ追加
+        if (!tweetContent.contains("#PR")) {
+            tweetContent += " #PR";
+        }
+        
+        // 末尾にアフィリエイトURLを追加
+        tweetContent += "\n" + item.getAffiliateUrl();
 
-     // 生成されたツイートをJobスコープのExecutionContextに保存
+        // 生成されたツイートをJobスコープのExecutionContextに保存
         chunkContext.getStepContext()
             .getStepExecution()
             .getJobExecution() // JobExecutionにアクセス
             .getExecutionContext()
             .put(ExecutionContextKeys.GENERATED_TWEET.getKey(), tweetContent);
 
-        // 生成されたツイートに#PRが付いているかチェックし、なければ追加
-        if (!tweetContent.contains("#PR")) {
-            tweetContent += " #PR";
-        }
         
         // アフィリエイトURLをDBに保存
         batchService.registerAffiliateUrl(item.getAffiliateUrl());
 
-        System.out.println("生成されたツイート内容: " + tweetContent);
+        System.out.println("GenerateTweetTasklet: 生成されたツイート内容 " + tweetContent);
 
         return RepeatStatus.FINISHED;
     }

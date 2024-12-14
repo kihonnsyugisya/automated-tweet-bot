@@ -29,7 +29,7 @@ public class PostTweetTasklet implements Tasklet {
         if (generatedTweet != null && !generatedTweet.isEmpty()) {
             // TwitterServiceを使ってツイートする
             twitterService.tweet(generatedTweet);
-            System.out.println("ツイートしました: " + generatedTweet);
+            System.out.println("PostTweetTasklet: ツイートされた内容  " + generatedTweet);
         } else {
             System.err.println("生成されたツイートがありません。");
         }

@@ -20,7 +20,10 @@ public class BatchService {
 	private RakutenApiParametersMapper rakutenApiParametersMapper;
 	
 	public OpenAiApiParametersEntity getOpenAiParameter() {
-		return openAiPromptMapper.getLatestPrompt();		
+        // DBから最大番号のIDを取得
+        long maxPromptId = openAiPromptMapper.getMaxPromptId();
+                
+		return openAiPromptMapper.getLatestPrompt(maxPromptId);		
 	}
 	
 	public RakutenApiParametersEntity getRakutenParameter() {
