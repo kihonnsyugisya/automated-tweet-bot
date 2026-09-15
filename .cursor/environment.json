@@ -1,0 +1,13 @@
+{
+  "name": "automated-affiliate-bot",
+  "user": "ubuntu",
+  "install": "./.cursor/install.sh",
+  "start": "./.cursor/start.sh",
+  "terminals": [
+    {
+      "name": "app",
+      "command": "./gradlew --no-daemon bootRun"
+    }
+  ],
+  "ports": [8080]
+}
