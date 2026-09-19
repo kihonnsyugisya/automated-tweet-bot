@@ -9,5 +9,10 @@
       "command": "./gradlew --no-daemon bootRun"
     }
   ],
-  "ports": [8080]
+  "ports": [
+    {
+      "name": "app",
+      "port": 8080
+    }
+  ]
 }
