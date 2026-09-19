@@ -10,6 +10,9 @@ import lombok.Data;
 public class RakutenProperties {
     @Value("${rakuten.api.applicationId}")
     private String applicationId;
+
+    @Value("${rakuten.api.accessKey}")
+    private String accessKey;
     
     @Value("${rakuten.api.affiliateId}")
     private String affiliateId;

@@ -31,6 +31,17 @@ cat /etc/default/automated-affiliate-bot
 nano /etc/default/automated-affiliate-bot
 ```
 
+#### 楽天API（2026年移行後）
+
+2026年2月以降、楽天ウェブサービスは `openapi.rakuten.co.jp` と **applicationId + accessKey** の二要素認証が必須です。本番では [アプリ一覧](https://webservice.rakuten.co.jp/app/list) でアプリを再登録し、**バックエンドサービス** として EC2 の外向き IP を許可してください。
+
+| 環境変数 | 説明 |
+|----------|------|
+| `RAKUTEN_API_APPLICATIONID` | UUID 形式の applicationId |
+| `RAKUTEN_API_ACCESSKEY` | ダッシュボードで発行した accessKey |
+| `RAKUTEN_API_AFFILIATEID` | アフィリエイト ID（従来どおり） |
+| `RAKUTEN_API_APIURL` | 省略時はランキング API 新 URL（`ichibaranking` 配下） |
+
 反映コマンド
 ```bash
 # ~/.bashrc を再読み込みして環境変数を反映
