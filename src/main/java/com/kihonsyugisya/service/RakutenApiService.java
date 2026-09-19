@@ -31,12 +31,14 @@ public class RakutenApiService {
     	
         // プロパティファイルからAPIのURLとIDを取得
         String apiUrl = rakutenPropertie.getApiUrl(); 
-        String applicationId = rakutenPropertie.getApplicationId(); 
+        String applicationId = rakutenPropertie.getApplicationId();
+        String accessKey = rakutenPropertie.getAccessKey();
         String affiliateId = rakutenPropertie.getAffiliateId();
 
         // URIビルダーの設定
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(apiUrl)
                 .queryParam("applicationId", applicationId)
+                .queryParam("accessKey", accessKey)
                 .queryParam("affiliateId", affiliateId)
                 .queryParam("formatVersion", 2)
                 .queryParam("page", 1)
@@ -56,19 +58,23 @@ public class RakutenApiService {
         // 完成したURLを文字列として取得
         String url = uriBuilder.build().toUriString();
         
-        // URLの確認用ログ出力
+        // URLの確認用ログ出力（accessKeyはマスク）
         System.out.println("--- URL ----------------------------------------------------------");
-        System.out.println(url);
+        System.out.println(maskAccessKeyInUrl(url));
 
         RakutenApiResponseDto apiResponse = restTemplate.getForObject(url, RakutenApiResponseDto.class);
 
         // レスポンスの一部をログに出力して確認
         System.out.println(apiResponse.getItems().get(0).getPointRateStartTime() + ": response");
         System.out.println("--- RakutenResponse----------------------------------------------------------");
-        System.out.println(url);
+        System.out.println(maskAccessKeyInUrl(url));
         
         
         return apiResponse; // ProductDtoのリストを返す
+    }
+
+    private static String maskAccessKeyInUrl(String url) {
+        return url.replaceAll("(accessKey=)[^&]*", "$1***");
     }
     
 }

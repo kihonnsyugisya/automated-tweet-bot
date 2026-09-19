@@ -40,10 +40,11 @@ email.recipient=${EMAIL_RECIPIENT:dev@example.com}
 spring.mail.host=${MAIL_HOST:localhost}
 spring.mail.port=${MAIL_PORT:1025}
 
-# --- Rakuten API ---
+# --- Rakuten API (openapi.rakuten.co.jp — 2026 migration) ---
 rakuten.api.applicationId=${RAKUTEN_API_APPLICATIONID:dummy-application-id}
+rakuten.api.accessKey=${RAKUTEN_API_ACCESSKEY:dummy-access-key}
 rakuten.api.affiliateId=${RAKUTEN_API_AFFILIATEID:dummy-affiliate-id}
-rakuten.api.apiUrl=${RAKUTEN_API_APIURL:https://app.rakuten.co.jp/services/api/IchibaItem/Ranking/20220601}
+rakuten.api.apiUrl=${RAKUTEN_API_APIURL:https://openapi.rakuten.co.jp/ichibaranking/api/IchibaItem/Ranking/20220601}
 
 # --- OpenAI API ---
 openai.api.key=${OPENAI_API_KEY:dummy-openai-key}
